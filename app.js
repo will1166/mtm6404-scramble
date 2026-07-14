@@ -94,6 +94,49 @@ function App() {
   // Game over triggers if we run out of words OR hit 3 strikes
   const isGameOver = wordsList.length === 0 || strikes >= 3;
 
+  // --- HANDLER FUNCTIONS ---
+
+  // Handle when the player submits their guess
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Stop the page from refreshing on submit!
+    
+    const cleanGuess = guess.trim().toLowerCase();
+    const cleanAnswer = currentWord.toLowerCase();
+
+    if (cleanGuess === cleanAnswer) {
+      setPoints(prev => prev + 1);
+      setFeedback("🎉 Correct! Great eye!");
+      setGuess("");
+      // Remove the successfully guessed word from the front of the list
+      setWordsList(prev => prev.slice(1));
+    } else {
+      setStrikes(prev => prev + 1);
+      setFeedback("❌ Wrong! Try again or pass.");
+      setGuess("");
+    }
+  };
+
+  // Handle when the player skips/passes the current word
+  const handlePass = () => {
+    if (passes > 0) {
+      setPasses(prev => prev - 1);
+      setFeedback("🎟️ Passed! That movie went to the back of the stack.");
+      setGuess("");
+      // Take the first word and move it to the end of the array
+      setWordsList(prev => [...prev.slice(1), prev[0]]);
+    }
+  };
+
+  // Reset the entire game to try again
+  const handleReset = () => {
+    setPoints(0);
+    setStrikes(0);
+    setPasses(3);
+    setGuess("");
+    setFeedback("");
+    setWordsList(shuffle([...originalWords]));
+  };
+
 return (
     <div className="scramble-game" style={{ maxWidth: '500px', margin: '40px auto', textAlign: 'center', fontFamily: 'sans-serif' }}>
       <h1>🎬 Movie Scramble 🎬</h1>
@@ -113,7 +156,8 @@ return (
           <h2>Game Over! 🎬</h2>
           {strikes >= 3 ? <p>You hit the maximum number of strikes.</p> : <p>Wow! You cleared the whole movie reel!</p>}
           <h3>Final Score: {points} Points</h3>
-          <button style={{ padding: '10px 20px', fontSize: '16px', cursor: 'pointer' }}>
+          {/* LINKED: Added onClick to reset the game */}
+          <button onClick={handleReset} style={{ padding: '10px 20px', fontSize: '16px', cursor: 'pointer', backgroundColor: '#2ecc71', color: 'white', border: 'none', borderRadius: '4px' }}>
             Play Again
           </button>
         </div>
@@ -130,7 +174,8 @@ return (
             </p>
           )}
 
-          <form>
+          {/* LINKED: Added onSubmit handler here */}
+          <form onSubmit={handleSubmit}>
             <input 
               type="text" 
               placeholder="Type movie name..." 
@@ -142,14 +187,29 @@ return (
             <button type="submit" style={{ padding: '10px 20px', fontSize: '16px', margin: '5px', cursor: 'pointer' }}>
               Submit Guess
             </button>
-            <button type="button" style={{ padding: '10px 20px', fontSize: '16px', margin: '5px', cursor: 'pointer', backgroundColor: '#f39c12', color: 'white', border: 'none' }}>
+            {/* LINKED: Added onClick, disabled attribute, and visual styling for passes */}
+            <button 
+              type="button" 
+              onClick={handlePass}
+              disabled={passes === 0}
+              style={{ 
+                padding: '10px 20px', 
+                fontSize: '16px', 
+                margin: '5px', 
+                cursor: passes === 0 ? 'not-allowed' : 'pointer', 
+                backgroundColor: passes === 0 ? '#bdc3c7' : '#f39c12', 
+                color: 'white', 
+                border: 'none' 
+              }}
+            >
               Pass Word
             </button>
           </form>
         </div>
       )}
     </div>
-  );}
+  );
+}
 
 // Render the application to the body element
 const root = ReactDOM.createRoot(document.body);
