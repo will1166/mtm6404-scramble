@@ -112,7 +112,7 @@ function App() {
     } else {
       setStrikes(prev => prev + 1);
       setFeedback("❌ Wrong! Try again or pass.");
-      setGuess("");
+      // FIXED: Guess is NOT cleared here so the user can see/edit their incorrect typo
     }
   };
 
@@ -120,10 +120,10 @@ function App() {
   const handlePass = () => {
     if (passes > 0) {
       setPasses(prev => prev - 1);
-      setFeedback("🎟️ Passed! That movie went to the back of the stack.");
+      setFeedback("🎟️ Passed!");
       setGuess("");
-      // Take the first word and move it to the end of the array
-      setWordsList(prev => [...prev.slice(1), prev[0]]);
+      // FIXED: Removes the passed word from the list entirely so the game can reach absolute completion
+      setWordsList(prev => prev.slice(1));
     }
   };
 
@@ -156,7 +156,7 @@ return (
           <h2>Game Over! 🎬</h2>
           {strikes >= 3 ? <p>You hit the maximum number of strikes.</p> : <p>Wow! You cleared the whole movie reel!</p>}
           <h3>Final Score: {points} Points</h3>
-          {/* LINKED: Added onClick to reset the game */}
+          {/* Added onClick to reset the game */}
           <button onClick={handleReset} style={{ padding: '10px 20px', fontSize: '16px', cursor: 'pointer', backgroundColor: '#2ecc71', color: 'white', border: 'none', borderRadius: '4px' }}>
             Play Again
           </button>
@@ -174,7 +174,7 @@ return (
             </p>
           )}
 
-          {/* LINKED: Added onSubmit handler here */}
+          {/* onSubmit handler */}
           <form onSubmit={handleSubmit}>
             <input 
               type="text" 
@@ -187,7 +187,7 @@ return (
             <button type="submit" style={{ padding: '10px 20px', fontSize: '16px', margin: '5px', cursor: 'pointer' }}>
               Submit Guess
             </button>
-            {/* LINKED: Added onClick, disabled attribute, and visual styling for passes */}
+            {/*  onClick for passes */}
             <button 
               type="button" 
               onClick={handlePass}
