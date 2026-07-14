@@ -98,7 +98,7 @@ function App() {
 
   // Handle when the player submits their guess
   const handleSubmit = (e) => {
-    e.preventDefault(); // Stop the page from refreshing on submit!
+    e.preventDefault(); 
     
     const cleanGuess = guess.trim().toLowerCase();
     const cleanAnswer = currentWord.toLowerCase();
@@ -112,7 +112,6 @@ function App() {
     } else {
       setStrikes(prev => prev + 1);
       setFeedback("❌ Wrong! Try again or pass.");
-      // FIXED: Guess is NOT cleared here so the user can see/edit their incorrect typo
     }
   };
 
@@ -122,7 +121,7 @@ function App() {
       setPasses(prev => prev - 1);
       setFeedback("🎟️ Passed!");
       setGuess("");
-      // FIXED: Removes the passed word from the list entirely so the game can reach absolute completion
+      // Removes the passed word from the list entirely so the game can reach absolute completion
       setWordsList(prev => prev.slice(1));
     }
   };
@@ -197,7 +196,7 @@ return (
                 fontSize: '16px', 
                 margin: '5px', 
                 cursor: passes === 0 ? 'not-allowed' : 'pointer', 
-                backgroundColor: passes === 0 ? '#bdc3c7' : '#f39c12', 
+                backgroundColor: passes === 0 ? '#bdc3c7' : '#2C5782', 
                 color: 'white', 
                 border: 'none' 
               }}
