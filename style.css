@@ -1,0 +1,33 @@
+body {
+  background-color: #f5f6fa;
+  margin: 0;
+  padding: 0;
+}
+
+.scramble-game {
+  background: white;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+input[type="text"] {
+  border: 2px solid #dcdde1;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input[type="text"]:focus {
+  border-color: #3498db;
+}
+
+button {
+  border-radius: 4px;
+  font-weight: bold;
+  transition: opacity 0.2s;
+}
+
+button:hover {
+  opacity: 0.9;
+}
